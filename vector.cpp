@@ -1,5 +1,6 @@
 #include <iostream>
 
+template<typename T>
 class APVector {
     private:
 
@@ -9,16 +10,18 @@ class APVector {
 
     public:
 
-    APVector(int initialSize = 0, int initialValue = 0) : maxSize(initialSize) {
-        data = new int[maxSize];
+    APVector(int initialSize = 0) : maxSize(initialSize) {
+        data = new T[maxSize];
         currentSize = initialSize;
 
         for (int i = 0; i < initialSize; i++) {
-            data[i] = initialValue;
+            data[i] = T{};
         }
+
+        std::cout << "Created Vector\n";
     }
 
-    void push_back(int value) {
+    void push_back(T value) {
         if (currentSize == maxSize) {
             resize();
         }
@@ -30,7 +33,7 @@ class APVector {
         currentSize--;
     }
 
-    int operator[](int index) {
+    T operator[](int index) {
         if (index < 0 || index >= currentSize) {
             return -1;
         }
@@ -42,11 +45,11 @@ class APVector {
         return currentSize;
     }
 
-    int front() {
+    T front() {
         return data[0];
     }
 
-    int back() {
+    T back() {
         return data[currentSize - 1];
     }
 
@@ -75,7 +78,7 @@ class APVector {
     void resize() {
         maxSize = maxSize * 2 ? maxSize != 0 : 1;
 
-        int *newData = new int[maxSize];
+        T *newData = new T[maxSize];
 
         for (int i = 0; i < currentSize; i++) {
             newData[i] = data[i];
@@ -84,12 +87,13 @@ class APVector {
         delete data;
 
         data = newData;
+        std::cout << "Resized Vector\n";
     }
     
     void resize(int newCap) {
         maxSize = newCap;
 
-        int *newData = new int[maxSize];
+        T *newData = new T[maxSize];
 
         for (int i = 0; i < currentSize; i++) {
             newData[i] = data[i];
@@ -98,11 +102,12 @@ class APVector {
         delete data;
 
         data = newData;
+        std::cout << "Resized Vector\n";
     }
 };
 
 int main() {
-    APVector v;
+    APVector<int> v;
 
     v.push_back(1);
     v.push_back(2);
