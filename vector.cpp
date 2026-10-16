@@ -6,7 +6,7 @@ class APVector {
 
     int maxSize;
     int currentSize;
-    int *data;
+    T *data;
 
     public:
 
@@ -33,10 +33,10 @@ class APVector {
         currentSize--;
     }
 
-    T operator[](int index) {
-        if (index < 0 || index >= currentSize) {
-            return -1;
-        }
+    T &operator[](int index) {
+        // if (index < 0 || index >= currentSize) {
+        //     return nullptr;
+        // }
 
         return data[index];
     }
@@ -56,7 +56,8 @@ class APVector {
     // emplace back
     
     void clear() {
-        delete data;
+        delete[] data;
+        data = nullptr;
         maxSize = 0;
         currentSize = 0;
     }
@@ -72,11 +73,16 @@ class APVector {
     // public resize
 
     // capacity
+    
+
+    ~APVector() {
+        clear();
+    }
 
     private:
     
     void resize() {
-        maxSize = maxSize * 2 ? maxSize != 0 : 1;
+        maxSize = maxSize != 0 ? maxSize * 2 : 1;
 
         T *newData = new T[maxSize];
 
@@ -84,7 +90,7 @@ class APVector {
             newData[i] = data[i];
         }
 
-        delete data;
+        delete[] data;
 
         data = newData;
         std::cout << "Resized Vector\n";
@@ -99,7 +105,7 @@ class APVector {
             newData[i] = data[i];
         }
 
-        delete data;
+        delete[] data;
 
         data = newData;
         std::cout << "Resized Vector\n";
