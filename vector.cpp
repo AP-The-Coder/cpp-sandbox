@@ -29,17 +29,19 @@ public:
         std::cout << "Copied Vector\n";
     }
 
+    // Copy assignment operator
+
     APVector& operator=(const APVector &other) {
         if (this == &other) {
             return *this;
         }
 
         maxSize = other.maxSize;
+        currentSize = other.currentSize;
 
         T *pointerToOldData = data;
 
         data = new T[other.maxSize];
-        currentSize = other.currentSize;
 
         for (int i = 0; i < other.currentSize; i++) {
             data[i] = other.data[i];
@@ -48,6 +50,38 @@ public:
         delete[] pointerToOldData;
 
         std::cout << "Copy Assigned Vector\n";
+
+        return *this;
+    }
+
+    // Move Constructor
+
+    APVector(APVector &&other) : maxSize(other.maxSize), currentSize(other.currentSize) {
+        data = other.data;
+        other.data = nullptr;
+        other.maxSize = 0;
+        other.currentSize = 0;
+
+        std::cout << "Moved Vector\n";
+    }
+
+    // Move assignment operator
+
+    APVector& operator=(APVector &&other) {
+        if (this == &other) {
+            return *this;
+        }
+
+        maxSize = other.maxSize;
+        currentSize = other.currentSize;
+
+        delete[] data;
+        data = other.data;
+        other.data = nullptr;
+        other.maxSize = 0;
+        other.currentSize = 0;
+
+        std::cout << "Move Assigned Vector\n";
 
         return *this;
     }
@@ -61,7 +95,9 @@ public:
     }
 
     void pop_back() {
-        currentSize--;
+        if (currentSize > 0) {
+            --currentSize;
+        }
     }
 
     T &operator[](int index) {
